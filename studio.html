@@ -307,9 +307,9 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
             Video Studio
         </a>
-        <a class="nav-item" data-tool="faceswap">
+        <a class="nav-item" data-tool="scene">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12a3 3 0 106 0 3 3 0 00-6 0z"/><path d="M21 12c0 5-4 9-9 9s-9-4-9-9 4-9 9-9c2 0 4 .8 5.5 2"/><path d="M21 4v5h-5"/></svg>
-            Face Swap
+            Scene Recreate
         </a>
         <a class="nav-item" data-tool="adult">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
@@ -425,6 +425,7 @@
 
     <div class="toast" id="toast"></div>
 
+    <script src="engine.js"></script>
     <script>
         const TOOLS = {
             image: {
@@ -445,14 +446,14 @@
                 engines: ['Veo 3.1 (default)', 'WAN 2.5', 'Nano Banana 2'],
                 styles: ['Cinematic','Vlog','Lifestyle','Slow-mo','Dance','UGC']
             },
-            faceswap: {
+            scene: {
                 eyebrow: 'Generate',
-                title: 'Face Swap & Cloning',
-                desc: 'Replace any subject in a video with your AI model. Keep the scene, change the face.',
+                title: 'Scene Recreation',
+                desc: 'Upload any video as a reference. Recreate the scene — pose, lighting, motion — from scratch with your trained AI model.',
                 cost: 25,
-                placeholder: 'Paste a video URL or upload a reference. Then pick the AI model to swap in.',
-                engines: ['FaceFusion (default)', 'ReActor'],
-                styles: ['Auto-match','Preserve lighting','Lock expression','Body morph','Hair lock','Smooth seams']
+                placeholder: 'Describe the scene you want to recreate. Upload a reference clip below to lock pose & motion.',
+                engines: ['Pose Transfer (default)', 'Motion Reference', 'Scene Composition'],
+                styles: ['Lock pose','Lock motion','Lock lighting','Match composition','Loose reference','Style only']
             },
             adult: {
                 eyebrow: 'Generate · 18+',
@@ -501,19 +502,9 @@
             }
         };
 
-        // available media for fake "results"
-        const RESULTS_POOL = [
-            { type:'image', src:'images/girl-1.jpg' },
-            { type:'image', src:'images/girl-2.jpg' },
-            { type:'image', src:'images/girl-3.jpg' },
-            { type:'image', src:'images/girl-4.jpg' },
-            { type:'image', src:'images/girl-5.jpg' },
-            { type:'image', src:'images/girl-6.jpg' },
-            { type:'video', src:'images/girl-1.mp4' },
-            { type:'video', src:'images/girl-2.mp4' },
-            { type:'video', src:'images/girl-3.mp4' },
-            { type:'video', src:'images/girl-4.mp4' },
-        ];
+        // Engine: provider can be 'mock' (default), 'fal', 'replicate', or 'civitai'.
+        // To switch to a real backend later, drop in your API key and change provider.
+        const engine = new FanWolfEngine({ provider: 'mock' });
 
         let currentTool = 'image';
         let credits = 240;
@@ -572,7 +563,7 @@
             }
         };
 
-        // GENERATE
+        // GENERATE — runs through the engine, consumes its event stream.
         $('generate-btn').addEventListener('click', async () => {
             const prompt = $('prompt-input').value.trim();
             if (!prompt) {
@@ -586,11 +577,15 @@
             }
 
             const count = parseInt($('count-select').value, 10);
+            const engineSel = $('engine-select').value;
+            const styleEl = document.querySelector('.chip.active');
+            const style = styleEl ? styleEl.textContent : null;
+
             const btn = $('generate-btn');
             btn.disabled = true;
             btn.querySelector('svg').style.animation = 'shimmer 1s linear infinite';
 
-            // create skeleton tiles
+            // create skeleton tiles up front so the user sees something happening
             const gallery = $('gallery');
             const skeletons = [];
             for (let i = 0; i < count; i++) {
@@ -602,24 +597,47 @@
             }
             updateCount();
 
-            // simulate generation
-            await new Promise(r => setTimeout(r, 1400 + Math.random() * 600));
+            try {
+                const job = engine.generate({
+                    tool: currentTool,
+                    prompt, count, engine: engineSel, style,
+                });
 
-            // replace skeletons with real media
-            skeletons.forEach((tile) => {
-                const result = RESULTS_POOL[Math.floor(Math.random() * RESULTS_POOL.length)];
-                const media = result.type === 'video'
-                    ? `<video autoplay muted loop playsinline preload="metadata"><source src="${result.src}" type="video/mp4"></video>`
-                    : `<img src="${result.src}" alt="">`;
-                tile.innerHTML = media + `<div class="tile-meta">${TOOLS[currentTool].title} · just now</div>`;
-                generated.unshift(result);
-            });
-
-            credits -= cost;
-            $('credit-count').textContent = credits;
-            btn.disabled = false;
-            btn.querySelector('svg').style.animation = '';
-            showToast(`Generated ${count} · used ${cost} credits`);
+                let received = 0;
+                for await (const evt of job) {
+                    if (evt.type === 'error') {
+                        // wipe the skeletons we added
+                        skeletons.forEach(s => s.remove());
+                        updateCount();
+                        showToast(evt.blocked
+                            ? '⛔ Prompt blocked by safety filter'
+                            : '⚠ ' + evt.message);
+                        break;
+                    }
+                    if (evt.type === 'result') {
+                        const tile = skeletons[received++];
+                        if (!tile) continue;
+                        const m = evt.media;
+                        const media = m.type === 'video'
+                            ? `<video autoplay muted loop playsinline preload="metadata"><source src="${m.src}" type="video/mp4"></video>`
+                            : `<img src="${m.src}" alt="">`;
+                        tile.innerHTML = media + `<div class="tile-meta">${TOOLS[currentTool].title} · just now</div>`;
+                        generated.unshift(m);
+                    }
+                    if (evt.type === 'done') {
+                        credits -= cost;
+                        $('credit-count').textContent = credits;
+                        showToast(`Generated ${evt.total} · used ${cost} credits`);
+                    }
+                }
+            } catch (err) {
+                skeletons.forEach(s => s.remove());
+                updateCount();
+                showToast('⚠ Generation failed: ' + (err.message || 'unknown'));
+            } finally {
+                btn.disabled = false;
+                btn.querySelector('svg').style.animation = '';
+            }
         });
 
         function updateCount() {
