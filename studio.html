@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FanWolf Studio — Hub</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="apple-touch-icon" href="logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+        :root {
+            --bg:#0b0b10;
+            --panel:#11121a;
+            --panel-2:#161824;
+            --panel-3:#1c1e2c;
+            --border:#22232f;
+            --border-2:#2c2e3d;
+            --text:#f4f4f7;
+            --text-2:#a4a6b3;
+            --text-3:#71727f;
+            --accent:#a78bfa;
+            --accent-2:#f5c242;
+            --gradient:linear-gradient(135deg,#a78bfa 0%,#f5c242 100%);
+        }
+        html, body { height:100%; }
+        body {
+            font-family:'Inter',system-ui,-apple-system,sans-serif;
+            background:var(--bg);
+            color:var(--text);
+            -webkit-font-smoothing:antialiased;
+            display:grid;
+            grid-template-rows:56px 1fr;
+            grid-template-columns:240px 1fr;
+            grid-template-areas:"top top" "side main";
+            overflow:hidden;
+        }
+        a { color:inherit; text-decoration:none; }
+
+        /* TOP BAR */
+        .topbar {
+            grid-area:top;
+            display:flex; align-items:center; justify-content:space-between;
+            padding:0 1.2rem;
+            border-bottom:1px solid var(--border);
+            background:var(--panel);
+        }
+        .topbar-left, .topbar-right { display:flex; align-items:center; gap:.8rem; }
+        .topbar .logo { display:flex; align-items:center; gap:.5rem; font-weight:700; font-size:.95rem; }
+        .topbar .logo img { width:28px; height:28px; object-fit:contain; }
+        .back-link { font-size:.85rem; color:var(--text-2); padding:.4rem .7rem; border-radius:6px; transition:background .15s, color .15s; }
+        .back-link:hover { background:var(--panel-2); color:var(--text); }
+
+        .credits-pill {
+            display:inline-flex; align-items:center; gap:.5rem;
+            padding:.4rem .8rem;
+            background:var(--panel-2);
+            border:1px solid var(--border);
+            border-radius:9999px;
+            font-size:.85rem; font-weight:600;
+        }
+        .credits-pill svg { width:14px; height:14px; color:var(--accent-2); }
+        .topup-btn {
+            padding:.45rem .9rem;
+            background:var(--gradient);
+            color:#000;
+            border:none; border-radius:8px;
+            font-family:inherit; font-weight:700; font-size:.85rem;
+            cursor:pointer;
+            transition:transform .15s;
+        }
+        .topup-btn:hover { transform:translateY(-1px); }
+
+        .avatar-circle {
+            width:30px; height:30px; border-radius:50%;
+            background:var(--gradient); color:#000;
+            display:grid; place-items:center;
+            font-weight:700; font-size:.8rem;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            grid-area:side;
+            background:var(--panel);
+            border-right:1px solid var(--border);
+            padding:1rem .7rem;
+            overflow-y:auto;
+        }
+        .nav-section { font-size:.7rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--text-3); padding:.4rem .7rem; margin-top:.6rem; }
+        .nav-section:first-child { margin-top:0; }
+        .nav-item {
+            display:flex; align-items:center; gap:.7rem;
+            padding:.55rem .7rem;
+            border-radius:8px;
+            color:var(--text-2); font-size:.92rem; font-weight:500;
+            cursor:pointer;
+            transition:background .15s, color .15s;
+            margin-bottom:.1rem;
+        }
+        .nav-item:hover { background:var(--panel-2); color:var(--text); }
+        .nav-item.active { background:rgba(167,139,250,.12); color:var(--text); }
+        .nav-item svg { width:16px; height:16px; flex-shrink:0; }
+        .nav-item .lock { margin-left:auto; width:12px; height:12px; color:var(--text-3); }
+
+        /* MAIN */
+        .main {
+            grid-area:main;
+            overflow-y:auto;
+            padding:2rem 2.5rem;
+        }
+        .tool-header { margin-bottom:2rem; }
+        .tool-eyebrow { color:var(--accent); font-size:.78rem; font-weight:600; letter-spacing:.08em; text-transform:uppercase; margin-bottom:.4rem; }
+        .tool-header h1 { font-size:1.7rem; font-weight:800; letter-spacing:-.02em; margin-bottom:.4rem; }
+        .tool-header p { color:var(--text-2); font-size:.95rem; max-width:680px; }
+
+        /* INPUT PANEL */
+        .panel {
+            background:var(--panel);
+            border:1px solid var(--border);
+            border-radius:12px;
+            padding:1.5rem;
+            margin-bottom:1.5rem;
+        }
+        .field { margin-bottom:1.1rem; }
+        .field:last-child { margin-bottom:0; }
+        .field label { display:block; font-size:.8rem; font-weight:600; color:var(--text-2); margin-bottom:.5rem; }
+        .field textarea, .field input[type="text"], .field select {
+            width:100%;
+            padding:.7rem .85rem;
+            background:var(--bg);
+            border:1px solid var(--border);
+            border-radius:8px;
+            color:var(--text);
+            font-family:inherit; font-size:.92rem;
+            resize:vertical;
+            outline:none;
+            transition:border-color .15s, box-shadow .15s;
+        }
+        .field textarea { min-height:84px; }
+        .field textarea:focus, .field input:focus, .field select:focus {
+            border-color:var(--accent);
+            box-shadow:0 0 0 3px rgba(167,139,250,.15);
+        }
+
+        .row { display:grid; grid-template-columns:repeat(auto-fit, minmax(180px,1fr)); gap:.9rem; }
+
+        .chip-row { display:flex; flex-wrap:wrap; gap:.4rem; }
+        .chip {
+            padding:.4rem .85rem;
+            background:var(--bg);
+            border:1px solid var(--border);
+            border-radius:9999px;
+            font-size:.82rem; color:var(--text-2);
+            cursor:pointer;
+            transition:border-color .15s, color .15s, background .15s;
+        }
+        .chip:hover { border-color:var(--border-2); color:var(--text); }
+        .chip.active { background:rgba(167,139,250,.12); border-color:var(--accent); color:var(--text); }
+
+        .actions {
+            display:flex; align-items:center; justify-content:space-between;
+            margin-top:1.4rem;
+            padding-top:1.2rem;
+            border-top:1px solid var(--border);
+        }
+        .cost-hint { font-size:.85rem; color:var(--text-3); }
+        .cost-hint b { color:var(--accent-2); }
+        .btn {
+            display:inline-flex; align-items:center; gap:.45rem;
+            padding:.7rem 1.3rem;
+            background:var(--gradient);
+            color:#000;
+            border:none; border-radius:8px;
+            font-family:inherit; font-weight:700; font-size:.95rem;
+            cursor:pointer;
+            transition:transform .15s, opacity .15s;
+        }
+        .btn:hover { transform:translateY(-1px); }
+        .btn:disabled { opacity:.5; cursor:wait; transform:none; }
+        .btn svg { width:14px; height:14px; }
+
+        /* GALLERY */
+        .section-title { display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; }
+        .section-title h2 { font-size:1.05rem; font-weight:700; }
+        .section-title .count { font-size:.85rem; color:var(--text-3); }
+        .gallery { display:grid; grid-template-columns:repeat(auto-fill, minmax(180px, 1fr)); gap:.9rem; }
+        .tile {
+            aspect-ratio:9/16;
+            background:var(--panel-2);
+            border:1px solid var(--border);
+            border-radius:10px;
+            position:relative;
+            overflow:hidden;
+            cursor:pointer;
+            transition:transform .2s, border-color .2s;
+        }
+        .tile:hover { transform:translateY(-3px); border-color:var(--accent); }
+        .tile img, .tile video {
+            position:absolute; inset:0; width:100%; height:100%;
+            object-fit:cover; display:block;
+        }
+        .tile-meta {
+            position:absolute; left:0; right:0; bottom:0;
+            padding:.7rem .6rem .5rem;
+            background:linear-gradient(to top, rgba(0,0,0,.85) 0%, transparent 100%);
+            font-size:.72rem; color:#fff;
+        }
+        .tile-skeleton {
+            position:absolute; inset:0;
+            background:linear-gradient(90deg, var(--panel-2) 0%, var(--panel-3) 40%, var(--panel-2) 80%);
+            background-size:200% 100%;
+            animation:shimmer 1.2s linear infinite;
+        }
+        .tile-skeleton::after {
+            content:'Generating…';
+            position:absolute; inset:0;
+            display:grid; place-items:center;
+            color:var(--accent); font-size:.85rem; font-weight:600;
+        }
+        @keyframes shimmer {
+            from { background-position:0 0; }
+            to { background-position:-200% 0; }
+        }
+
+        /* EMPTY STATE */
+        .empty {
+            text-align:center; padding:3rem 1rem;
+            color:var(--text-3);
+            border:1px dashed var(--border);
+            border-radius:10px;
+        }
+
+        /* MODAL */
+        .modal-bg {
+            position:fixed; inset:0;
+            background:rgba(0,0,0,.7);
+            backdrop-filter:blur(6px);
+            display:none; align-items:center; justify-content:center;
+            z-index:2000;
+            padding:1rem;
+        }
+        .modal-bg.show { display:flex; }
+        .modal {
+            background:var(--panel); border:1px solid var(--border);
+            border-radius:14px;
+            padding:2rem;
+            max-width:420px; width:100%;
+            text-align:center;
+        }
+        .modal h2 { font-size:1.3rem; margin-bottom:.5rem; }
+        .modal p { color:var(--text-2); margin-bottom:1.4rem; font-size:.92rem; }
+        .modal-actions { display:flex; gap:.6rem; justify-content:center; }
+        .modal .btn-secondary { background:transparent; color:var(--text); border:1px solid var(--border-2); padding:.7rem 1.3rem; border-radius:8px; cursor:pointer; font-family:inherit; font-weight:600; }
+
+        /* TOAST */
+        .toast {
+            position:fixed; bottom:1.5rem; left:50%;
+            transform:translateX(-50%) translateY(20px);
+            background:var(--text); color:#000;
+            padding:.7rem 1.2rem; border-radius:8px;
+            font-weight:600; font-size:.88rem;
+            opacity:0; pointer-events:none;
+            transition:opacity .25s, transform .25s;
+            z-index:2000;
+        }
+        .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            body { grid-template-columns:1fr; grid-template-areas:"top" "main"; }
+            .sidebar { display:none; }
+            .main { padding:1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOP BAR -->
+    <header class="topbar">
+        <div class="topbar-left">
+            <a href="index.html" class="logo">
+                <img src="logo.png" alt="FanWolf">
+                <span>FanWolf</span>
+            </a>
+            <a href="index.html" class="back-link">← Back to site</a>
+        </div>
+        <div class="topbar-right">
+            <span class="credits-pill">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2 7h7l-5.5 4 2 7L12 16l-5.5 4 2-7L3 9h7z"/></svg>
+                <span id="credit-count">240</span> credits
+            </span>
+            <button class="topup-btn" onclick="window.location.href='index.html#pricing'">Top up</button>
+            <div class="avatar-circle">F</div>
+        </div>
+    </header>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="nav-section">Generate</div>
+        <a class="nav-item" data-tool="image">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>
+            Image Studio
+        </a>
+        <a class="nav-item" data-tool="video">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+            Video Studio
+        </a>
+        <a class="nav-item" data-tool="faceswap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12a3 3 0 106 0 3 3 0 00-6 0z"/><path d="M21 12c0 5-4 9-9 9s-9-4-9-9 4-9 9-9c2 0 4 .8 5.5 2"/><path d="M21 4v5h-5"/></svg>
+            Face Swap
+        </a>
+        <a class="nav-item" data-tool="adult">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            Adult / Fanvue
+            <svg class="lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        </a>
+
+        <div class="nav-section">Train</div>
+        <a class="nav-item" data-tool="model">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v6m0 8v6M2 12h6m8 0h6M5 5l4 4m6 6l4 4M5 19l4-4m6-6l4-4"/></svg>
+            Custom Models
+        </a>
+
+        <div class="nav-section">Tools</div>
+        <a class="nav-item" data-tool="prompt">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 4h6v6"/><path d="M10 20H4v-6"/><path d="M20 4l-7 7"/><path d="M4 20l7-7"/></svg>
+            Prompt Builder
+        </a>
+        <a class="nav-item" data-tool="workspace">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h18M3 12h18M3 17h12"/></svg>
+            Workspace
+        </a>
+        <a class="nav-item" data-tool="api">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
+            Developer API
+        </a>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+        <div class="tool-header">
+            <div class="tool-eyebrow" id="tool-eyebrow">Generate</div>
+            <h1 id="tool-title">Image Studio</h1>
+            <p id="tool-desc">Hyper-realistic photos in seconds. Switch engines per shot — no commitment.</p>
+        </div>
+
+        <!-- INPUT PANEL -->
+        <div class="panel">
+            <div class="field">
+                <label for="prompt-input">Prompt</label>
+                <textarea id="prompt-input" placeholder="Describe what you want to generate. E.g. cinematic portrait of a 24yo redhead at golden hour, denim jacket, soft bokeh background, 85mm lens"></textarea>
+            </div>
+
+            <div class="row">
+                <div class="field">
+                    <label for="engine-select">Engine</label>
+                    <select id="engine-select">
+                        <option>Flux 2 (default)</option>
+                        <option>Imagen 4</option>
+                        <option>SDXL</option>
+                        <option>Pony Realism</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="aspect-select">Aspect</label>
+                    <select id="aspect-select">
+                        <option>9:16 (portrait)</option>
+                        <option>1:1 (square)</option>
+                        <option>16:9 (wide)</option>
+                        <option>4:5 (Instagram)</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="count-select">Count</label>
+                    <select id="count-select">
+                        <option>1</option>
+                        <option selected>4</option>
+                        <option>6</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="field">
+                <label>Style presets</label>
+                <div class="chip-row" id="chip-row">
+                    <span class="chip active">Realistic</span>
+                    <span class="chip">Cinematic</span>
+                    <span class="chip">Editorial</span>
+                    <span class="chip">Soft glam</span>
+                    <span class="chip">Street</span>
+                    <span class="chip">Boudoir</span>
+                </div>
+            </div>
+
+            <div class="actions">
+                <div class="cost-hint">Cost: <b id="cost-amount">8 credits</b> · ~12s</div>
+                <button class="btn" id="generate-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 3l3 6-6 3 6 3-3 6 6-3 3 6 3-6 6-3-6-3 3-6-6 3z"/></svg>
+                    Generate
+                </button>
+            </div>
+        </div>
+
+        <!-- RESULTS -->
+        <div class="section-title">
+            <h2>Recent generations</h2>
+            <span class="count" id="gallery-count">0 results</span>
+        </div>
+        <div class="gallery" id="gallery"></div>
+    </main>
+
+    <!-- ADULT GATE MODAL -->
+    <div class="modal-bg" id="adult-modal">
+        <div class="modal">
+            <h2>Adult Mode</h2>
+            <p>This tool generates uncensored content for Fanvue creators. You must be 18+ and accept that all output is for legitimate adult-content workflows.</p>
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeAdult(false)">Cancel</button>
+                <button class="btn" onclick="closeAdult(true)">I'm 18+ · Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        const TOOLS = {
+            image: {
+                eyebrow: 'Generate',
+                title: 'Image Studio',
+                desc: 'Hyper-realistic photos in seconds. Switch engines per shot — no commitment.',
+                cost: 8,
+                placeholder: 'Describe what you want to generate. E.g. cinematic portrait of a 24yo redhead at golden hour, denim jacket, soft bokeh background',
+                engines: ['Flux 2 (default)', 'Imagen 4', 'SDXL', 'Pony Realism'],
+                styles: ['Realistic','Cinematic','Editorial','Soft glam','Street','Boudoir']
+            },
+            video: {
+                eyebrow: 'Generate',
+                title: 'Video Studio',
+                desc: '5–20 second realistic clips from a single prompt. Cinematic motion, lip sync, sound.',
+                cost: 40,
+                placeholder: 'Describe the scene. E.g. slow dolly-in on woman walking through neon-lit Tokyo alley at night, rain reflections',
+                engines: ['Veo 3.1 (default)', 'WAN 2.5', 'Nano Banana 2'],
+                styles: ['Cinematic','Vlog','Lifestyle','Slow-mo','Dance','UGC']
+            },
+            faceswap: {
+                eyebrow: 'Generate',
+                title: 'Face Swap & Cloning',
+                desc: 'Replace any subject in a video with your AI model. Keep the scene, change the face.',
+                cost: 25,
+                placeholder: 'Paste a video URL or upload a reference. Then pick the AI model to swap in.',
+                engines: ['FaceFusion (default)', 'ReActor'],
+                styles: ['Auto-match','Preserve lighting','Lock expression','Body morph','Hair lock','Smooth seams']
+            },
+            adult: {
+                eyebrow: 'Generate · 18+',
+                title: 'Adult / Fanvue Mode',
+                desc: 'Uncensored toolkit tuned for Fanvue. Pose control, outfit swap, scene transformer.',
+                cost: 12,
+                placeholder: 'Describe pose, outfit, scene. Adult mode unlocks uncensored output for Fanvue.',
+                engines: ['Pony Realism (default)', 'Flux Uncensored', 'Custom LoRA'],
+                styles: ['Realistic','Boudoir','Lingerie','Implied','Editorial','Soft']
+            },
+            model: {
+                eyebrow: 'Train',
+                title: 'Custom AI Models',
+                desc: 'Train your own AI influencer from a handful of photos. 100% consistent across every generation.',
+                cost: 200,
+                placeholder: 'Upload 8–20 reference photos. Name your model. Training takes ~15 minutes.',
+                engines: ['LoRA (default)', 'DreamBooth', 'Face Lock'],
+                styles: ['Face only','Full body','Pose-locked','Style-flex','Identity-strict','Loose']
+            },
+            prompt: {
+                eyebrow: 'Tools',
+                title: 'Prompt Builder',
+                desc: 'Visual JSON prompt builder. Compose pro-level prompts with sliders & presets.',
+                cost: 0,
+                placeholder: 'Build a structured prompt: subject, style, lighting, camera, mood. Export to any engine.',
+                engines: ['JSON v2', 'Plain text', 'SDXL syntax'],
+                styles: ['Portrait','Wide shot','Macro','Action','Studio','On-location']
+            },
+            workspace: {
+                eyebrow: 'Tools',
+                title: 'Creator Workspace',
+                desc: 'Multi-track editor. Cut, layer, upscale to 4K, auto-caption, schedule — without leaving the Hub.',
+                cost: 4,
+                placeholder: 'Drag clips to start a project. Workspace handles the rest.',
+                engines: ['Auto-edit', 'Manual timeline'],
+                styles: ['Reel','TikTok','Long-form','Story','Ad','Compilation']
+            },
+            api: {
+                eyebrow: 'Developer',
+                title: 'Developer API',
+                desc: 'Plug FanWolf into your stack. One key, every model, predictable per-credit pricing.',
+                cost: 0,
+                placeholder: 'Generate an API key, then call /v1/generate with your prompt and model.',
+                engines: ['REST', 'Webhooks', 'Streaming'],
+                styles: ['cURL','Node','Python','Go','PHP','Ruby']
+            }
+        };
+
+        // available media for fake "results"
+        const RESULTS_POOL = [
+            { type:'image', src:'images/girl-1.jpg' },
+            { type:'image', src:'images/girl-2.jpg' },
+            { type:'image', src:'images/girl-3.jpg' },
+            { type:'image', src:'images/girl-4.jpg' },
+            { type:'image', src:'images/girl-5.jpg' },
+            { type:'image', src:'images/girl-6.jpg' },
+            { type:'video', src:'images/girl-1.mp4' },
+            { type:'video', src:'images/girl-2.mp4' },
+            { type:'video', src:'images/girl-3.mp4' },
+            { type:'video', src:'images/girl-4.mp4' },
+        ];
+
+        let currentTool = 'image';
+        let credits = 240;
+        const generated = [];
+
+        const $ = (id) => document.getElementById(id);
+        const navItems = document.querySelectorAll('.nav-item');
+
+        function loadTool(tool) {
+            const t = TOOLS[tool];
+            if (!t) return;
+            currentTool = tool;
+            $('tool-eyebrow').textContent = t.eyebrow;
+            $('tool-title').textContent = t.title;
+            $('tool-desc').textContent = t.desc;
+            $('prompt-input').placeholder = t.placeholder;
+            $('cost-amount').textContent = t.cost === 0 ? 'Free' : t.cost + ' credits';
+
+            const engineSel = $('engine-select');
+            engineSel.innerHTML = t.engines.map(e => `<option>${e}</option>`).join('');
+
+            const chipRow = $('chip-row');
+            chipRow.innerHTML = t.styles.map((s,i) => `<span class="chip${i===0?' active':''}">${s}</span>`).join('');
+            wireChips();
+
+            navItems.forEach(n => n.classList.toggle('active', n.dataset.tool === tool));
+            history.replaceState(null, '', '#' + tool);
+        }
+
+        function wireChips() {
+            document.querySelectorAll('.chip').forEach(chip => {
+                chip.addEventListener('click', () => {
+                    chip.parentElement.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+                    chip.classList.add('active');
+                });
+            });
+        }
+
+        navItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const tool = item.dataset.tool;
+                if (tool === 'adult' && !sessionStorage.getItem('adult-ok')) {
+                    $('adult-modal').classList.add('show');
+                    return;
+                }
+                loadTool(tool);
+            });
+        });
+
+        window.closeAdult = (ok) => {
+            $('adult-modal').classList.remove('show');
+            if (ok) {
+                sessionStorage.setItem('adult-ok', '1');
+                loadTool('adult');
+            }
+        };
+
+        // GENERATE
+        $('generate-btn').addEventListener('click', async () => {
+            const prompt = $('prompt-input').value.trim();
+            if (!prompt) {
+                showToast('Add a prompt first');
+                return;
+            }
+            const cost = TOOLS[currentTool].cost;
+            if (credits < cost) {
+                showToast('Not enough credits — top up to continue');
+                return;
+            }
+
+            const count = parseInt($('count-select').value, 10);
+            const btn = $('generate-btn');
+            btn.disabled = true;
+            btn.querySelector('svg').style.animation = 'shimmer 1s linear infinite';
+
+            // create skeleton tiles
+            const gallery = $('gallery');
+            const skeletons = [];
+            for (let i = 0; i < count; i++) {
+                const tile = document.createElement('div');
+                tile.className = 'tile';
+                tile.innerHTML = '<div class="tile-skeleton"></div>';
+                gallery.prepend(tile);
+                skeletons.push(tile);
+            }
+            updateCount();
+
+            // simulate generation
+            await new Promise(r => setTimeout(r, 1400 + Math.random() * 600));
+
+            // replace skeletons with real media
+            skeletons.forEach((tile) => {
+                const result = RESULTS_POOL[Math.floor(Math.random() * RESULTS_POOL.length)];
+                const media = result.type === 'video'
+                    ? `<video autoplay muted loop playsinline preload="metadata"><source src="${result.src}" type="video/mp4"></video>`
+                    : `<img src="${result.src}" alt="">`;
+                tile.innerHTML = media + `<div class="tile-meta">${TOOLS[currentTool].title} · just now</div>`;
+                generated.unshift(result);
+            });
+
+            credits -= cost;
+            $('credit-count').textContent = credits;
+            btn.disabled = false;
+            btn.querySelector('svg').style.animation = '';
+            showToast(`Generated ${count} · used ${cost} credits`);
+        });
+
+        function updateCount() {
+            const n = $('gallery').children.length;
+            $('gallery-count').textContent = n + (n === 1 ? ' result' : ' results');
+        }
+
+        function showToast(msg) {
+            const t = $('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            clearTimeout(t._timer);
+            t._timer = setTimeout(() => t.classList.remove('show'), 2000);
+        }
+
+        // boot
+        const initialTool = (location.hash || '#image').slice(1);
+        loadTool(TOOLS[initialTool] ? initialTool : 'image');
+
+        window.addEventListener('hashchange', () => {
+            const t = location.hash.slice(1);
+            if (TOOLS[t]) loadTool(t);
+        });
+    </script>
+</body>
+</html>
