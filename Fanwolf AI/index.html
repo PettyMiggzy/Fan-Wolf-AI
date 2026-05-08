@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FanWolf AI — Fans. Content. Wealth. Powered by AI.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --accent: #8b5cf6;
+            --accent-gold: #f5c242;
+            --gradient-start: #8b5cf6;
+            --gradient-end: #f5c242;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: #fff;
+            line-height: 1.6;
+        }
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            background: rgba(10,10,15,0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            padding: 1.2rem 2rem;
+        }
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.7rem;
+            font-weight: 800;
+        }
+        .logo-text {
+            background: linear-gradient(135deg, #f5c242, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 9rem 2rem 4rem;
+            position: relative;
+        }
+        .hero-image {
+            max-width: 1100px;
+            width: 100%;
+            border-radius: 24px;
+            box-shadow: 0 30px 60px -15px rgba(139, 92, 246, 0.4);
+            margin: 2.5rem 0;
+            border: 6px solid #111;
+        }
+        .hero h1 {
+            font-size: clamp(2.8rem, 7vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1.05;
+            margin-bottom: 1rem;
+        }
+        .hero h1 .highlight {
+            background: linear-gradient(135deg, #f5c242, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .tagline {
+            font-size: 1.2rem;
+            color: #f5c242;
+            letter-spacing: 4px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        .btn {
+            padding: 1rem 2.5rem;
+            border-radius: 9999px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: transform 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: #000;
+        }
+        .btn-primary:hover { transform: translateY(-3px); }
+        .section { padding: 6rem 2rem; max-width: 1280px; margin: 0 auto; }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+        }
+        .feature-card {
+            background: #0a0a0f;
+            border: 1px solid #2a2a35;
+            border-radius: 20px;
+            padding: 2rem;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+        .feature-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--accent);
+        }
+        .feature-icon {
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+        }
+        .feature-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.6rem;
+        }
+        .feature-card p {
+            color: #aaa;
+            font-size: 0.98rem;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+        .price-card {
+            background: #0a0a0f;
+            border: 1px solid #2a2a35;
+            border-radius: 20px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+        .price-card:hover { transform: translateY(-6px); }
+        .price-card.featured {
+            border: 2px solid var(--accent-gold);
+            position: relative;
+        }
+        .price-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent-gold);
+            color: #000;
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            padding: 0.3rem 0.9rem;
+            border-radius: 9999px;
+        }
+        .price-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.8rem;
+        }
+        .price-amount {
+            font-size: 2.6rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #f5c242, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.3rem;
+        }
+        .price-credits {
+            color: #f5c242;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+        .price-card ul {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 1.8rem;
+        }
+        .price-card li {
+            color: #ccc;
+            padding: 0.4rem 0;
+            font-size: 0.95rem;
+        }
+        .price-card li::before {
+            content: '✓ ';
+            color: var(--accent-gold);
+            font-weight: 800;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: #666;
+            border-top: 1px solid #1a1a24;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">
+                <span>🐺</span>
+                <span class="logo-text">FanWolf AI</span>
+            </div>
+            <div style="display:flex; gap:2rem; align-items:center;">
+                <a href="#features" style="color:#ccc; text-decoration:none;">Features</a>
+                <a href="#monwolf" style="color:#ccc; text-decoration:none;">MonWolf</a>
+                <a href="#pricing" class="btn btn-primary">Buy Credits</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="tagline">FANS. CONTENT. WEALTH. POWERED BY AI.</div>
+        <h1>CREATE.<br>ENGAGE.<br><span class="highlight">MONETIZE.</span><br>AUTOMATE.<br>REPEAT.</h1>
+
+        <img src="fanwolf-hero.jpg" alt="FanWolf AI - Luxury AI Content Empire" class="hero-image">
+
+        <p style="font-size:1.3rem; max-width:700px; margin:1.5rem auto; color:#ddd;">
+            Buy credits with debit card or $MONWOLF • Your personal wallet lives in the Hub
+        </p>
+
+        <a href="#pricing" class="btn btn-primary" style="font-size:1.3rem; padding:1.3rem 3rem;">
+            Start Building Your Empire →
+        </a>
+    </section>
+
+    <!-- Features -->
+    <section class="section" id="features">
+        <h2 style="text-align:center; font-size:2.8rem; margin-bottom:3rem;">Build Your AI Empire</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎨</div>
+                <h3>AI Content Studio</h3>
+                <p>Generate photos, videos, captions, and voice clips in your signature style — on demand, around the clock.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💬</div>
+                <h3>Fan Auto-Engage</h3>
+                <p>Personalized DMs and replies that sound exactly like you. Wake up to a sold-out inbox, not a backlog.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💸</div>
+                <h3>Monetize Everywhere</h3>
+                <p>One Hub for OnlyFans, Fansly, Instagram, X, and more. Sell PPV, subs, and tips without juggling tabs.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Wealth Analytics</h3>
+                <p>See exactly which content, fans, and channels print money — and let the AI double down automatically.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔐</div>
+                <h3>Your Wallet, Your Keys</h3>
+                <p>Every creator gets a personal wallet inside the Hub. Top up with card or $MONWOLF, withdraw any time.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Set It & Scale It</h3>
+                <p>Schedule posts, drops, and campaigns weeks ahead. The pack runs while you sleep.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- MonWolf -->
+    <section id="monwolf" class="section" style="background:#1a1a24; text-align:center;">
+        <h2 style="font-size:2.4rem;">Buy Credits with $MONWOLF or Debit Card</h2>
+        <div style="max-width:620px; margin:2rem auto; background:#0a0a0f; border:2px solid #f5c242; border-radius:20px; padding:2rem;">
+            <div style="font-family:monospace; font-size:1.15rem; color:#f5c242; background:#111; padding:1rem; border-radius:12px; word-break:break-all;">
+                0x8361a59d340466211ad4aB41C09a32e4530a7777
+            </div>
+            <p style="margin-top:1rem; color:#f5c242;">$MONWOLF on Monad • Contract Address</p>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="section" id="pricing">
+        <h2 style="text-align:center; font-size:2.8rem; margin-bottom:0.6rem;">Credit Packs</h2>
+        <p style="text-align:center; color:#aaa; max-width:620px; margin:0 auto;">
+            Pay with debit card or $MONWOLF. Credits never expire.
+        </p>
+        <div class="pricing-grid">
+            <div class="price-card">
+                <h3>Starter</h3>
+                <div class="price-amount">$29</div>
+                <div class="price-credits">300 credits</div>
+                <ul>
+                    <li>AI photo & caption generation</li>
+                    <li>Basic fan auto-replies</li>
+                    <li>1 connected platform</li>
+                    <li>Email support</li>
+                </ul>
+                <a href="#monwolf" class="btn btn-primary" style="width:100%; justify-content:center;">Buy Starter</a>
+            </div>
+            <div class="price-card featured">
+                <h3>Pro</h3>
+                <div class="price-amount">$99</div>
+                <div class="price-credits">1,200 credits</div>
+                <ul>
+                    <li>Everything in Starter</li>
+                    <li>AI video & voice clips</li>
+                    <li>Up to 5 connected platforms</li>
+                    <li>Wealth analytics dashboard</li>
+                    <li>Priority support</li>
+                </ul>
+                <a href="#monwolf" class="btn btn-primary" style="width:100%; justify-content:center;">Buy Pro</a>
+            </div>
+            <div class="price-card">
+                <h3>Empire</h3>
+                <div class="price-amount">$299</div>
+                <div class="price-credits">4,500 credits</div>
+                <ul>
+                    <li>Everything in Pro</li>
+                    <li>Unlimited platforms</li>
+                    <li>Custom AI persona training</li>
+                    <li>Dedicated success manager</li>
+                    <li>Early access to new features</li>
+                </ul>
+                <a href="#monwolf" class="btn btn-primary" style="width:100%; justify-content:center;">Buy Empire</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        © <span id="year"></span> FanWolf AI · Fans. Content. Wealth. Powered by AI.
+    </footer>
+
+    <script>
+        // Smooth scroll — guard against anchors that don't exist
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href === '#' || href.length < 2) return;
+                const target = document.querySelector(href);
+                if (!target) return;
+                e.preventDefault();
+                target.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // Footer year
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
