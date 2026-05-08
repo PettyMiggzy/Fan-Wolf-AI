@@ -148,7 +148,7 @@
         .ticker-track {
             display:flex; gap:1rem;
             width:max-content;
-            animation:ticker 50s linear infinite;
+            animation:ticker 25s linear infinite;
         }
         .ticker:hover .ticker-track { animation-play-state:paused; }
         @keyframes ticker {
@@ -600,8 +600,14 @@
         const cards = [
             { type:'image', src:'images/girl-1.jpg', g:'g1', stat:{kind:'heart', label:'1.2M'} },
             { type:'video', src:'images/girl-1.mp4', g:'g2', stat:{kind:'money', label:'$5.8K'} },
-            { type:'video', src:'images/girl-2.mp4', g:'g3', stat:{kind:'thumb', label:'340K'} },
-            { type:'video', src:'images/girl-3.mp4', g:'g4', stat:{kind:'money', label:'$12.4K'} },
+            { type:'image', src:'images/girl-2.jpg', g:'g3', stat:{kind:'thumb', label:'340K'} },
+            { type:'video', src:'images/girl-2.mp4', g:'g4', stat:{kind:'money', label:'$12.4K'} },
+            { type:'image', src:'images/girl-3.jpg', g:'g5', stat:{kind:'heart', label:'2.1M'} },
+            { type:'video', src:'images/girl-3.mp4', g:'g6', stat:{kind:'money', label:'$8.9K'} },
+            { type:'image', src:'images/girl-4.jpg', g:'g1', stat:{kind:'thumb', label:'580K'} },
+            { type:'video', src:'images/girl-4.mp4', g:'g2', stat:{kind:'money', label:'$24.7K'} },
+            { type:'image', src:'images/girl-5.jpg', g:'g3', stat:{kind:'heart', label:'1.6M'} },
+            { type:'image', src:'images/girl-6.jpg', g:'g4', stat:{kind:'money', label:'$14.2K'} },
         ];
         const icons = {
             heart:'<svg class="ico" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-7-10a4 4 0 017-2.7A4 4 0 0119 11c0 5.5-7 10-7 10z"/></svg>',
