@@ -3,126 +3,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FanWolf AI — Build &amp; Scale AI Influencers In Minutes</title>
+    <title>FanWolf AI — Build &amp; Scale AI Influencers</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * { margin:0; padding:0; box-sizing:border-box; }
+        *,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
         :root {
-            --bg-0:#0a0a0f; --bg-1:#12121a; --bg-2:#1a1a24;
-            --border:#2a2a35;
-            --text:#fff; --text-dim:#aaa;
-            --gold:#f5c242; --purple:#8b5cf6;
-            --grad:linear-gradient(135deg,#8b5cf6,#f5c242);
-            --grad-text:linear-gradient(135deg,#f5c242,#8b5cf6);
+            --bg:#0b0b10;
+            --panel:#11121a;
+            --panel-2:#161824;
+            --border:#22232f;
+            --border-2:#2c2e3d;
+            --text:#f4f4f7;
+            --text-2:#a4a6b3;
+            --text-3:#71727f;
+            --accent:#a78bfa;
+            --accent-2:#f5c242;
+            --gradient:linear-gradient(135deg,#a78bfa 0%,#f5c242 100%);
         }
         html { scroll-behavior:smooth; }
-        body { font-family:'Inter',sans-serif; background:var(--bg-0); color:var(--text); line-height:1.6; -webkit-font-smoothing:antialiased; }
+        body {
+            font-family:'Inter',system-ui,-apple-system,sans-serif;
+            background:var(--bg);
+            color:var(--text);
+            line-height:1.55;
+            -webkit-font-smoothing:antialiased;
+            font-feature-settings:'cv11','ss01';
+        }
         a { color:inherit; text-decoration:none; }
+        ::selection { background:var(--accent); color:#000; }
+
+        .wrap { max-width:1200px; margin:0 auto; padding:0 1.5rem; }
 
         /* NAV */
-        nav { position:fixed; top:0; left:0; right:0; background:rgba(10,10,15,0.85); backdrop-filter:blur(20px); z-index:1000; padding:1rem 2rem; border-bottom:1px solid rgba(255,255,255,.05); }
-        .nav-container { max-width:1280px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; }
-        .nav-links { display:flex; gap:2rem; align-items:center; }
-        .nav-links a { color:#ddd; font-weight:600; transition:color .2s; }
-        .nav-links a:hover { color:var(--gold); }
-        .logo { display:flex; align-items:center; gap:10px; font-size:1.5rem; font-weight:800; }
-        .logo-text { background:var(--grad-text); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        nav {
+            position:fixed; top:0; left:0; right:0;
+            background:rgba(11,11,16,0.78);
+            backdrop-filter:blur(16px);
+            -webkit-backdrop-filter:blur(16px);
+            border-bottom:1px solid var(--border);
+            z-index:1000;
+        }
+        .nav-inner { display:flex; align-items:center; justify-content:space-between; height:64px; }
+        .logo { display:flex; align-items:center; gap:.6rem; font-weight:700; font-size:1.05rem; letter-spacing:-.01em; }
+        .logo-mark { width:36px; height:36px; display:grid; place-items:center; }
+        .logo-mark img { width:100%; height:100%; object-fit:contain; display:block; }
+        .nav-links { display:flex; align-items:center; gap:2rem; }
+        .nav-links a { color:var(--text-2); font-size:.92rem; font-weight:500; transition:color .15s; }
+        .nav-links a:hover { color:var(--text); }
 
         /* BUTTONS */
-        .btn { padding:.95rem 2rem; border-radius:9999px; font-weight:700; font-size:1rem; display:inline-flex; align-items:center; justify-content:center; gap:8px; transition:transform .25s, box-shadow .25s; cursor:pointer; border:none; font-family:inherit; }
-        .btn-primary { background:var(--grad); color:#000; box-shadow:0 10px 30px -10px rgba(245,194,66,.45); }
-        .btn-primary:hover { transform:translateY(-2px); box-shadow:0 14px 40px -8px rgba(245,194,66,.6); }
-        .btn-ghost { background:transparent; color:#fff; border:1px solid #333; }
-        .btn-ghost:hover { border-color:var(--gold); color:var(--gold); }
-        .btn-lg { padding:1.2rem 2.6rem; font-size:1.1rem; }
+        .btn {
+            display:inline-flex; align-items:center; justify-content:center; gap:.4rem;
+            padding:.65rem 1.1rem;
+            font-family:inherit; font-weight:600; font-size:.92rem;
+            border-radius:8px; border:1px solid transparent;
+            cursor:pointer; transition:background .15s, border-color .15s, color .15s;
+            white-space:nowrap;
+        }
+        .btn-primary { background:var(--text); color:#000; }
+        .btn-primary:hover { background:#fff; }
+        .btn-ghost { background:transparent; color:var(--text); border-color:var(--border-2); }
+        .btn-ghost:hover { border-color:var(--text-3); background:var(--panel); }
+        .btn-lg { padding:.85rem 1.4rem; font-size:1rem; border-radius:10px; }
 
         /* HERO */
-        .hero { padding:8rem 2rem 4rem; text-align:center; position:relative; overflow:hidden; }
-        .hero::before { content:''; position:absolute; top:-30%; left:50%; transform:translateX(-50%); width:1200px; height:1200px; background:radial-gradient(circle, rgba(139,92,246,.18), transparent 60%); z-index:-1; }
-        .eyebrow { display:inline-block; padding:.4rem 1rem; border:1px solid rgba(245,194,66,.3); border-radius:9999px; color:var(--gold); font-weight:600; font-size:.85rem; letter-spacing:2px; margin-bottom:1.5rem; }
-        .hero h1 { font-size:clamp(2.5rem,6.5vw,5rem); font-weight:900; line-height:1.05; max-width:1000px; margin:0 auto 1.5rem; letter-spacing:-1px; }
-        .highlight { background:var(--grad-text); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-        .hero-sub { font-size:1.2rem; color:#bbb; max-width:680px; margin:0 auto 2.5rem; }
-        .hero-ctas { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-bottom:2rem; }
-        .trust-row { display:flex; gap:1.8rem; justify-content:center; flex-wrap:wrap; color:var(--text-dim); font-size:.88rem; margin-bottom:3rem; }
-        .trust-row span::before { content:'✓ '; color:var(--gold); font-weight:800; }
-        .hero-image { max-width:1100px; width:100%; border-radius:24px; box-shadow:0 40px 80px -20px rgba(139,92,246,.45); margin:0 auto; border:6px solid #111; display:block; }
+        .hero { padding:9rem 0 6rem; text-align:center; position:relative; }
+        .hero::before {
+            content:''; position:absolute; inset:0;
+            background:
+                radial-gradient(ellipse 60% 50% at 50% 0%, rgba(167,139,250,.12), transparent 70%),
+                radial-gradient(ellipse 40% 40% at 50% 100%, rgba(245,194,66,.06), transparent 70%);
+            z-index:-1;
+        }
+        .badge {
+            display:inline-flex; align-items:center; gap:.5rem;
+            padding:.35rem .85rem;
+            background:var(--panel);
+            border:1px solid var(--border);
+            border-radius:9999px;
+            font-size:.8rem; color:var(--text-2); font-weight:500;
+            margin-bottom:1.5rem;
+        }
+        .badge-dot { width:6px; height:6px; border-radius:50%; background:#22c55e; box-shadow:0 0 8px #22c55e; }
+        .hero h1 {
+            font-size:clamp(2.5rem, 5.6vw, 4.4rem);
+            font-weight:800;
+            line-height:1.04;
+            letter-spacing:-.035em;
+            max-width:880px;
+            margin:0 auto 1.4rem;
+        }
+        .hero h1 .grad { background:var(--gradient); -webkit-background-clip:text; background-clip:text; color:transparent; }
+        .hero-sub {
+            font-size:1.1rem;
+            color:var(--text-2);
+            max-width:600px;
+            margin:0 auto 2rem;
+        }
+        .hero-ctas { display:flex; gap:.7rem; justify-content:center; flex-wrap:wrap; margin-bottom:2.2rem; }
+        .trust { display:flex; gap:1.6rem; justify-content:center; flex-wrap:wrap; color:var(--text-3); font-size:.85rem; }
+        .trust-item { display:inline-flex; align-items:center; gap:.4rem; }
+        .check-ico { width:14px; height:14px; color:var(--accent-2); }
 
-        /* MODEL PILLS */
-        .models-strip { padding:3.5rem 2rem; border-block:1px solid var(--border); background:var(--bg-1); text-align:center; }
-        .models-strip h4 { color:var(--text-dim); font-weight:500; font-size:.85rem; letter-spacing:3px; text-transform:uppercase; margin-bottom:1.4rem; }
-        .pills { display:flex; gap:.7rem; justify-content:center; flex-wrap:wrap; max-width:1080px; margin:0 auto; }
-        .pill { padding:.55rem 1.1rem; background:var(--bg-0); border:1px solid var(--border); border-radius:9999px; font-weight:600; font-size:.9rem; color:#ddd; transition:border-color .2s, color .2s; }
-        .pill:hover { border-color:var(--gold); color:var(--gold); }
-        .pill.lit { border-color:var(--purple); color:#fff; }
+        /* PRODUCT MOCKUP */
+        .mock {
+            max-width:1080px; margin:4rem auto 0;
+            border-radius:14px;
+            background:var(--panel);
+            border:1px solid var(--border);
+            box-shadow:0 60px 120px -40px rgba(167,139,250,.25), 0 0 0 1px rgba(255,255,255,.03);
+            overflow:hidden;
+        }
+        .mock-bar { display:flex; align-items:center; gap:.4rem; padding:.7rem .9rem; border-bottom:1px solid var(--border); }
+        .mock-dot { width:10px; height:10px; border-radius:50%; background:#2c2e3d; }
+        .mock-body { display:grid; grid-template-columns:200px 1fr; min-height:340px; }
+        .mock-side { background:var(--panel-2); border-right:1px solid var(--border); padding:1rem; }
+        .mock-nav-item { display:flex; align-items:center; gap:.6rem; padding:.5rem .6rem; border-radius:6px; color:var(--text-2); font-size:.85rem; margin-bottom:.2rem; }
+        .mock-nav-item.active { background:rgba(167,139,250,.1); color:var(--text); }
+        .mock-nav-item svg { width:14px; height:14px; flex-shrink:0; }
+        .mock-grid { padding:1rem; display:grid; grid-template-columns:repeat(3,1fr); gap:.7rem; }
+        .mock-tile { aspect-ratio:3/4; border-radius:8px; background:linear-gradient(135deg, rgba(167,139,250,.18), rgba(245,194,66,.12)); border:1px solid var(--border); }
+        .mock-tile:nth-child(2) { background:linear-gradient(135deg, rgba(245,194,66,.18), rgba(167,139,250,.12)); }
+        .mock-tile:nth-child(4) { background:linear-gradient(135deg, rgba(99,102,241,.2), rgba(167,139,250,.12)); }
+        .mock-tile:nth-child(5) { background:linear-gradient(160deg, rgba(245,194,66,.14), rgba(167,139,250,.18)); }
+        .mock-tile:nth-child(6) { background:linear-gradient(120deg, rgba(167,139,250,.16), rgba(245,194,66,.18)); }
+        @media (max-width:680px) { .mock-side { display:none; } .mock-body { grid-template-columns:1fr; } }
 
-        /* SECTIONS */
-        .section { padding:6rem 2rem; max-width:1280px; margin:0 auto; }
-        .section-header { text-align:center; margin-bottom:3.5rem; }
-        .section-header h2 { font-size:clamp(2rem,4vw,2.8rem); font-weight:800; margin-bottom:.6rem; letter-spacing:-.5px; }
-        .section-header p { color:var(--gold); font-size:1.1rem; font-weight:500; }
+        /* LOGO ROW (model engines) */
+        .engines { padding:5rem 0; border-top:1px solid var(--border); border-bottom:1px solid var(--border); background:var(--panel); }
+        .engines-label { text-align:center; color:var(--text-3); font-size:.78rem; letter-spacing:.18em; text-transform:uppercase; margin-bottom:1.6rem; }
+        .engines-row { display:flex; align-items:center; justify-content:center; gap:2.2rem; flex-wrap:wrap; }
+        .engine { color:var(--text-2); font-size:1rem; font-weight:600; opacity:.7; transition:opacity .2s, color .2s; }
+        .engine:hover { opacity:1; color:var(--text); }
 
-        /* SOCIAL PROOF */
-        .proof-strip { background:var(--bg-1); padding:5rem 2rem; border-block:1px solid var(--border); }
-        .proof-grid { max-width:1280px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1.5rem; }
-        .proof-card { background:var(--bg-0); border:1px solid var(--border); border-radius:20px; padding:1.5rem; transition:transform .3s, border-color .3s; }
-        .proof-card:hover { transform:translateY(-4px); border-color:var(--purple); }
-        .proof-head { display:flex; align-items:center; gap:.8rem; margin-bottom:1rem; }
-        .avatar { width:48px; height:48px; border-radius:50%; background:var(--grad); display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; }
-        .proof-meta .name { font-weight:700; }
-        .proof-meta .handle { font-size:.85rem; color:var(--text-dim); }
-        .proof-stats { display:flex; gap:1.5rem; margin-top:.8rem; padding-top:.8rem; border-top:1px solid var(--border); }
-        .stat .num { font-size:1.25rem; font-weight:800; background:var(--grad-text); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-        .stat .label { font-size:.75rem; color:var(--text-dim); text-transform:uppercase; letter-spacing:1px; }
+        /* SECTION */
+        .section { padding:6.5rem 0; }
+        .section-head { text-align:center; max-width:680px; margin:0 auto 3.5rem; }
+        .section-eyebrow { color:var(--accent); font-size:.85rem; font-weight:600; letter-spacing:.06em; text-transform:uppercase; margin-bottom:.8rem; }
+        .section-head h2 { font-size:clamp(1.9rem,3.6vw,2.6rem); font-weight:800; letter-spacing:-.025em; line-height:1.15; margin-bottom:.6rem; }
+        .section-head p { color:var(--text-2); font-size:1.05rem; }
 
-        /* TOOLS / FEATURES */
-        .tools-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:1.5rem; }
-        .tool-card { background:var(--bg-1); border:1px solid var(--border); border-radius:20px; padding:2rem; transition:transform .3s, border-color .3s; position:relative; overflow:hidden; }
-        .tool-card:hover { transform:translateY(-6px); border-color:var(--gold); }
-        .tool-icon { width:50px; height:50px; border-radius:14px; background:linear-gradient(135deg, rgba(139,92,246,.2), rgba(245,194,66,.2)); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:1.5rem; margin-bottom:1.1rem; }
-        .tool-card h3 { font-size:1.25rem; margin-bottom:.5rem; }
-        .tool-card p { color:#bbb; font-size:.97rem; margin-bottom:1rem; }
-        .tool-models { display:flex; flex-wrap:wrap; gap:.4rem; }
-        .tool-models .pill { padding:.25rem .7rem; font-size:.75rem; }
+        /* TOOLS */
+        .tools-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:1rem; }
+        .tool-card {
+            background:var(--panel);
+            border:1px solid var(--border);
+            border-radius:12px;
+            padding:1.6rem;
+            transition:border-color .2s, transform .2s;
+        }
+        .tool-card:hover { border-color:var(--border-2); transform:translateY(-2px); }
+        .tool-icon {
+            width:38px; height:38px; border-radius:9px;
+            background:rgba(167,139,250,.1);
+            border:1px solid rgba(167,139,250,.2);
+            display:grid; place-items:center;
+            color:var(--accent);
+            margin-bottom:1rem;
+        }
+        .tool-icon svg { width:18px; height:18px; }
+        .tool-card h3 { font-size:1rem; font-weight:600; letter-spacing:-.01em; margin-bottom:.35rem; }
+        .tool-card p { color:var(--text-2); font-size:.9rem; line-height:1.55; }
+        .tool-tags { display:flex; flex-wrap:wrap; gap:.3rem; margin-top:1rem; }
+        .tag { padding:.2rem .55rem; background:var(--panel-2); border:1px solid var(--border); border-radius:5px; font-size:.72rem; color:var(--text-2); font-weight:500; }
 
-        /* COMMUNITY */
-        .community { background:linear-gradient(135deg, rgba(139,92,246,.15), rgba(245,194,66,.1)); border:1px solid rgba(245,194,66,.2); border-radius:24px; padding:3.5rem 2rem; text-align:center; max-width:1080px; margin:0 auto; }
-        .community h2 { font-size:clamp(1.8rem,3.5vw,2.4rem); margin-bottom:.7rem; }
-        .community p { color:#ccc; max-width:560px; margin:0 auto 1.8rem; }
+        /* STATS STRIP */
+        .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:2rem; padding:3.5rem 0; border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+        .stat { text-align:center; }
+        .stat-num { font-size:2.4rem; font-weight:800; letter-spacing:-.025em; background:var(--gradient); -webkit-background-clip:text; background-clip:text; color:transparent; }
+        .stat-label { color:var(--text-3); font-size:.85rem; font-weight:500; margin-top:.3rem; }
+
+        /* HOW IT WORKS */
+        .steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1.5rem; }
+        .step { padding:1.8rem 1.6rem; background:var(--panel); border:1px solid var(--border); border-radius:12px; }
+        .step-num { display:inline-grid; place-items:center; width:30px; height:30px; border-radius:8px; background:var(--gradient); color:#000; font-weight:700; font-size:.9rem; margin-bottom:1rem; }
+        .step h3 { font-size:1.05rem; font-weight:600; margin-bottom:.4rem; }
+        .step p { color:var(--text-2); font-size:.9rem; }
 
         /* PRICING */
-        .pricing-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1.25rem; align-items:stretch; }
-        .price-card { background:var(--bg-1); border:1px solid var(--border); border-radius:20px; padding:2rem 1.5rem; display:flex; flex-direction:column; transition:transform .3s, border-color .3s; }
-        .price-card:hover { transform:translateY(-6px); }
-        .price-card.featured { border:2px solid var(--gold); position:relative; background:linear-gradient(180deg, rgba(245,194,66,.08), var(--bg-1)); }
-        .price-card.featured::before { content:'MOST POPULAR'; position:absolute; top:-12px; left:50%; transform:translateX(-50%); background:var(--gold); color:#000; font-size:.7rem; font-weight:800; letter-spacing:2px; padding:.3rem .8rem; border-radius:9999px; white-space:nowrap; }
-        .tier-name { font-size:1.1rem; font-weight:700; margin-bottom:.4rem; }
-        .tier-tag { font-size:.85rem; color:var(--text-dim); margin-bottom:1.2rem; }
-        .tier-price { font-size:2.4rem; font-weight:900; line-height:1; margin-bottom:.2rem; }
-        .tier-price small { font-size:1rem; color:var(--text-dim); font-weight:500; }
-        .tier-credits { color:var(--gold); font-weight:600; margin-bottom:1.4rem; font-size:.95rem; }
-        .tier-features { list-style:none; margin-bottom:1.6rem; flex-grow:1; }
-        .tier-features li { padding:.4rem 0; color:#ddd; font-size:.93rem; }
-        .tier-features li::before { content:'✓ '; color:var(--gold); font-weight:800; margin-right:4px; }
+        .pricing-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1rem; }
+        .price-card { background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:2rem 1.6rem; display:flex; flex-direction:column; transition:border-color .2s; }
+        .price-card:hover { border-color:var(--border-2); }
+        .price-card.featured { border-color:var(--accent); position:relative; background:linear-gradient(180deg, rgba(167,139,250,.05), var(--panel)); }
+        .price-card.featured::before {
+            content:'POPULAR';
+            position:absolute; top:-10px; left:1.6rem;
+            background:var(--accent); color:#000;
+            font-size:.7rem; font-weight:700; letter-spacing:.08em;
+            padding:.25rem .6rem; border-radius:5px;
+        }
+        .tier-name { font-size:1rem; font-weight:600; margin-bottom:.3rem; }
+        .tier-tag { font-size:.85rem; color:var(--text-3); margin-bottom:1.4rem; }
+        .tier-price { font-size:2.2rem; font-weight:800; letter-spacing:-.025em; line-height:1; }
+        .tier-price small { font-size:.95rem; color:var(--text-3); font-weight:500; margin-left:.2rem; }
+        .tier-credits { color:var(--accent-2); font-weight:600; margin:.4rem 0 1.4rem; font-size:.88rem; }
+        .tier-features { list-style:none; flex-grow:1; margin-bottom:1.5rem; }
+        .tier-features li { padding:.35rem 0; color:var(--text-2); font-size:.88rem; display:flex; gap:.5rem; align-items:flex-start; }
+        .tier-features li svg { width:14px; height:14px; flex-shrink:0; color:var(--accent-2); margin-top:3px; }
         .price-card .btn { width:100%; }
 
-        /* CONTRACT */
-        .contract { max-width:680px; margin:0 auto; text-align:center; }
-        .contract-box { background:var(--bg-0); border:2px solid var(--gold); border-radius:18px; padding:1.5rem; font-family:monospace; font-size:1.05rem; color:var(--gold); word-break:break-all; margin:1.5rem 0 .8rem; }
+        /* CTA / MONWOLF */
+        .cta-card { max-width:780px; margin:0 auto; padding:3rem 2.5rem; background:var(--panel); border:1px solid var(--border); border-radius:18px; text-align:center; }
+        .cta-card h2 { font-size:1.8rem; font-weight:700; letter-spacing:-.02em; margin-bottom:.5rem; }
+        .cta-card p { color:var(--text-2); margin-bottom:1.6rem; }
+        .contract { display:inline-flex; align-items:center; gap:.7rem; padding:.85rem 1.2rem; background:var(--bg); border:1px solid var(--border); border-radius:8px; font-family:'SF Mono','Menlo',monospace; font-size:.88rem; color:var(--accent-2); word-break:break-all; max-width:100%; cursor:pointer; transition:border-color .2s; }
+        .contract:hover { border-color:var(--accent-2); }
+        .contract svg { width:14px; height:14px; flex-shrink:0; color:var(--text-3); transition:color .2s; }
+        .contract:hover svg { color:var(--accent-2); }
+        .toast { position:fixed; bottom:2rem; left:50%; transform:translateX(-50%) translateY(20px); background:var(--text); color:#000; padding:.7rem 1.2rem; border-radius:8px; font-weight:600; font-size:.9rem; opacity:0; pointer-events:none; transition:opacity .25s, transform .25s; z-index:2000; }
+        .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
 
         /* FOOTER */
-        footer { text-align:center; padding:3rem 2rem 2rem; color:#666; border-top:1px solid var(--border); font-size:.88rem; }
-        footer .foot-row { margin-bottom:1rem; display:flex; justify-content:center; gap:1.5rem; flex-wrap:wrap; }
-        footer a:hover { color:var(--gold); }
+        footer { padding:3rem 0 2rem; border-top:1px solid var(--border); color:var(--text-3); font-size:.85rem; }
+        .foot-grid { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; }
+        .foot-links { display:flex; gap:1.5rem; flex-wrap:wrap; }
+        .foot-links a { color:var(--text-3); transition:color .15s; }
+        .foot-links a:hover { color:var(--text); }
 
-        @media (max-width: 720px) {
-            .nav-links { gap:.8rem; }
+        /* RESPONSIVE */
+        @media (max-width:760px) {
             .nav-links a:not(.btn) { display:none; }
-            .section { padding:4rem 1.2rem; }
-            .hero { padding:7rem 1.2rem 3rem; }
-            .btn { padding:.85rem 1.6rem; font-size:.95rem; }
+            .hero { padding:7rem 0 4rem; }
+            .section { padding:4.5rem 0; }
         }
     </style>
 </head>
@@ -130,298 +234,282 @@
 
     <!-- NAV -->
     <nav>
-        <div class="nav-container">
-            <a href="#top" class="logo"><span>🐺</span><span class="logo-text">FanWolf AI</span></a>
+        <div class="wrap nav-inner">
+            <a href="#top" class="logo">
+                <span class="logo-mark"><img src="logo.png" alt="FanWolf"></span>
+                FanWolf
+            </a>
             <div class="nav-links">
                 <a href="#tools">Tools</a>
+                <a href="#how">How it works</a>
                 <a href="#pricing">Pricing</a>
-                <a href="#monwolf">MonWolf</a>
-                <a href="#pricing" class="btn btn-primary">Get Started</a>
+                <a href="#monwolf">$MONWOLF</a>
+                <a href="#pricing" class="btn btn-primary">Get started</a>
             </div>
         </div>
     </nav>
 
     <!-- HERO -->
     <section class="hero" id="top">
-        <span class="eyebrow">FANS · CONTENT · WEALTH · AI</span>
-        <h1>Build &amp; Scale <span class="highlight">AI Influencers</span> In Minutes</h1>
-        <p class="hero-sub">
-            Every AI tool you need in one Hub — realistic models, photo &amp; video generation, face swap, and uncensored Fanvue content. 70+ models. One subscription.
-        </p>
-        <div class="hero-ctas">
-            <a href="#pricing" class="btn btn-primary btn-lg">Get Started for Free →</a>
-            <a href="#tools" class="btn btn-ghost btn-lg">Explore Tools</a>
-        </div>
-        <div class="trust-row">
-            <span>70+ AI Models</span>
-            <span>Full Commercial Rights</span>
-            <span>No Watermark</span>
-            <span>Instant Results</span>
-        </div>
-        <img src="fanwolf-hero.jpg" alt="FanWolf AI dashboard preview" class="hero-image">
-    </section>
+        <div class="wrap">
+            <span class="badge"><span class="badge-dot"></span> Now live · 70+ AI models in one Hub</span>
+            <h1>Build &amp; scale <span class="grad">AI influencers</span><br>without ever showing your face.</h1>
+            <p class="hero-sub">
+                One hub for realistic models, photo &amp; video generation, face swap, and uncensored Fanvue content. Pay once, generate forever.
+            </p>
+            <div class="hero-ctas">
+                <a href="#pricing" class="btn btn-primary btn-lg">Get started free →</a>
+                <a href="#tools" class="btn btn-ghost btn-lg">See the tools</a>
+            </div>
+            <div class="trust">
+                <span class="trust-item">
+                    <svg class="check-ico" viewBox="0 0 16 16" fill="currentColor"><path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"/></svg>
+                    Full commercial rights
+                </span>
+                <span class="trust-item">
+                    <svg class="check-ico" viewBox="0 0 16 16" fill="currentColor"><path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"/></svg>
+                    No watermark
+                </span>
+                <span class="trust-item">
+                    <svg class="check-ico" viewBox="0 0 16 16" fill="currentColor"><path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"/></svg>
+                    Credits never expire
+                </span>
+            </div>
 
-    <!-- MODEL PILLS -->
-    <section class="models-strip">
-        <h4>Powered by the world's best AI models</h4>
-        <div class="pills">
-            <span class="pill lit">Flux 2</span>
-            <span class="pill">WAN 2.5</span>
-            <span class="pill">Veo 3.1</span>
-            <span class="pill">Nano Banana 2</span>
-            <span class="pill">Imagen 4</span>
-            <span class="pill">SDXL</span>
-            <span class="pill">Pony Realism</span>
-            <span class="pill">Custom LoRA</span>
-            <span class="pill">+62 more</span>
         </div>
     </section>
 
-    <!-- SOCIAL PROOF -->
-    <section class="proof-strip">
-        <div class="section-header" style="margin-bottom:2.5rem;">
-            <h2>Creators Already Winning</h2>
-            <p>Real results from the FanWolf pack</p>
-        </div>
-        <div class="proof-grid">
-            <div class="proof-card">
-                <div class="proof-head">
-                    <div class="avatar">🦊</div>
-                    <div class="proof-meta">
-                        <div class="name">Luna V.</div>
-                        <div class="handle">@lunavfanvue</div>
-                    </div>
-                </div>
-                <p style="color:#ddd; font-size:.95rem;">"Cloned my niche in 2 days. Replaced my whole shoot budget."</p>
-                <div class="proof-stats">
-                    <div class="stat"><div class="num">$18.4k</div><div class="label">/ month</div></div>
-                    <div class="stat"><div class="num">42k</div><div class="label">followers</div></div>
-                </div>
-            </div>
-            <div class="proof-card">
-                <div class="proof-head">
-                    <div class="avatar">💎</div>
-                    <div class="proof-meta">
-                        <div class="name">Sasha K.</div>
-                        <div class="handle">@sashakai</div>
-                    </div>
-                </div>
-                <p style="color:#ddd; font-size:.95rem;">"AI model looks 100% real. PPV conversions doubled."</p>
-                <div class="proof-stats">
-                    <div class="stat"><div class="num">$32.1k</div><div class="label">/ month</div></div>
-                    <div class="stat"><div class="num">88k</div><div class="label">followers</div></div>
-                </div>
-            </div>
-            <div class="proof-card">
-                <div class="proof-head">
-                    <div class="avatar">🌹</div>
-                    <div class="proof-meta">
-                        <div class="name">Mira J.</div>
-                        <div class="handle">@miraonfv</div>
-                    </div>
-                </div>
-                <p style="color:#ddd; font-size:.95rem;">"Posting daily without ever picking up a camera again."</p>
-                <div class="proof-stats">
-                    <div class="stat"><div class="num">$9.8k</div><div class="label">/ month</div></div>
-                    <div class="stat"><div class="num">21k</div><div class="label">followers</div></div>
-                </div>
-            </div>
-            <div class="proof-card">
-                <div class="proof-head">
-                    <div class="avatar">⚡</div>
-                    <div class="proof-meta">
-                        <div class="name">Riley B.</div>
-                        <div class="handle">@rileybyte</div>
-                    </div>
-                </div>
-                <p style="color:#ddd; font-size:.95rem;">"Built 3 different AI models. Each one its own brand."</p>
-                <div class="proof-stats">
-                    <div class="stat"><div class="num">$24.7k</div><div class="label">/ month</div></div>
-                    <div class="stat"><div class="num">61k</div><div class="label">followers</div></div>
-                </div>
+    <!-- ENGINES -->
+    <section class="engines">
+        <div class="wrap">
+            <p class="engines-label">Powered by the world's leading AI engines</p>
+            <div class="engines-row">
+                <span class="engine">Flux 2</span>
+                <span class="engine">Veo 3.1</span>
+                <span class="engine">WAN 2.5</span>
+                <span class="engine">Imagen 4</span>
+                <span class="engine">SDXL</span>
+                <span class="engine">Nano Banana 2</span>
+                <span class="engine">Custom LoRA</span>
             </div>
         </div>
     </section>
 
-    <!-- TOOLS (PixelDojo-style) -->
-    <section id="tools" class="section">
-        <div class="section-header">
-            <h2>Every Tool. One Hub.</h2>
-            <p>Generation · Animation · Editing · Training · API</p>
-        </div>
-        <div class="tools-grid">
-            <div class="tool-card">
-                <div class="tool-icon">🖼️</div>
-                <h3>AI Image Studio</h3>
-                <p>Hyper-realistic photos in seconds. Switch engines per shot — no commitment to one model.</p>
-                <div class="tool-models">
-                    <span class="pill">Flux 2</span>
-                    <span class="pill">Imagen 4</span>
-                    <span class="pill">SDXL</span>
-                </div>
+    <!-- TOOLS -->
+    <section class="section" id="tools">
+        <div class="wrap">
+            <div class="section-head">
+                <div class="section-eyebrow">The Hub</div>
+                <h2>Every tool in one place.</h2>
+                <p>Generation, animation, training, editing, API. Switch engines per shot — no plan limits, no commitment.</p>
             </div>
-            <div class="tool-card">
-                <div class="tool-icon">🎬</div>
-                <h3>AI Video Studio</h3>
-                <p>5–20 second realistic clips from a single prompt. Cinematic motion, lip sync, sound.</p>
-                <div class="tool-models">
-                    <span class="pill">Veo 3.1</span>
-                    <span class="pill">WAN 2.5</span>
-                    <span class="pill">Nano Banana 2</span>
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>
+                    </div>
+                    <h3>AI Image Studio</h3>
+                    <p>Hyper-realistic photos in seconds. Switch engines per shot — no commitment.</p>
+                    <div class="tool-tags"><span class="tag">Flux 2</span><span class="tag">Imagen 4</span><span class="tag">SDXL</span></div>
                 </div>
-            </div>
-            <div class="tool-card">
-                <div class="tool-icon">🧬</div>
-                <h3>Custom AI Models (LoRA)</h3>
-                <p>Train your own AI influencer from a handful of photos. 100% consistent across every generation.</p>
-                <div class="tool-models">
-                    <span class="pill">LoRA Training</span>
-                    <span class="pill">Face Lock</span>
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+                    </div>
+                    <h3>AI Video Studio</h3>
+                    <p>5–20 second realistic clips from a single prompt. Cinematic motion, lip sync, sound.</p>
+                    <div class="tool-tags"><span class="tag">Veo 3.1</span><span class="tag">WAN 2.5</span></div>
                 </div>
-            </div>
-            <div class="tool-card">
-                <div class="tool-icon">🪄</div>
-                <h3>Face Swap &amp; Video Cloning</h3>
-                <p>Clone any reel and replace the subject with your AI model. Pose, scene, outfit — all editable.</p>
-                <div class="tool-models">
-                    <span class="pill">FaceFusion</span>
-                    <span class="pill">ReActor</span>
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v6m0 8v6M2 12h6m8 0h6M5 5l4 4m6 6l4 4M5 19l4-4m6-6l4-4"/></svg>
+                    </div>
+                    <h3>Custom AI Models</h3>
+                    <p>Train your own AI influencer from a handful of photos. 100% consistent across every generation.</p>
+                    <div class="tool-tags"><span class="tag">LoRA Training</span><span class="tag">Face Lock</span></div>
                 </div>
-            </div>
-            <div class="tool-card">
-                <div class="tool-icon">🧠</div>
-                <h3>Prompt Builder</h3>
-                <p>Visual JSON prompt builder. Stop guessing — compose pro-level prompts with sliders &amp; presets.</p>
-                <div class="tool-models">
-                    <span class="pill">JSON Schema</span>
-                    <span class="pill">Style Presets</span>
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12a3 3 0 106 0 3 3 0 00-6 0z"/><path d="M21 12c0 5-4 9-9 9s-9-4-9-9 4-9 9-9c2 0 4 .8 5.5 2"/><path d="M21 4v5h-5"/></svg>
+                    </div>
+                    <h3>Face Swap &amp; Cloning</h3>
+                    <p>Replace any subject in a video with your AI model. Keep the scene, change the face.</p>
+                    <div class="tool-tags"><span class="tag">FaceFusion</span><span class="tag">ReActor</span></div>
                 </div>
-            </div>
-            <div class="tool-card">
-                <div class="tool-icon">🔥</div>
-                <h3>Adult Mode + Fanvue Toolkit</h3>
-                <p>Uncensored photo &amp; clip generation tuned for Fanvue. Pose control, outfit swap, scene transformer.</p>
-                <div class="tool-models">
-                    <span class="pill">Pony Realism</span>
-                    <span class="pill">Uncensored</span>
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 4h6v6"/><path d="M10 20H4v-6"/><path d="M20 4l-7 7"/><path d="M4 20l7-7"/></svg>
+                    </div>
+                    <h3>Prompt Builder</h3>
+                    <p>Visual JSON prompt builder. Compose pro-level prompts with sliders &amp; presets.</p>
+                    <div class="tool-tags"><span class="tag">JSON Schema</span><span class="tag">Presets</span></div>
                 </div>
-            </div>
-            <div class="tool-card">
-                <div class="tool-icon">🎛️</div>
-                <h3>Creator Workspace</h3>
-                <p>Multi-track editor. Cut, layer, upscale, captionize, schedule — without ever leaving the Hub.</p>
-                <div class="tool-models">
-                    <span class="pill">Upscale 4K</span>
-                    <span class="pill">Auto-Caption</span>
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+                    </div>
+                    <h3>Adult / Fanvue Mode</h3>
+                    <p>Uncensored toolkit tuned for Fanvue. Pose control, outfit swap, scene transformer.</p>
+                    <div class="tool-tags"><span class="tag">Pony Realism</span><span class="tag">Uncensored</span></div>
                 </div>
-            </div>
-            <div class="tool-card">
-                <div class="tool-icon">⚡</div>
-                <h3>API Access</h3>
-                <p>Plug FanWolf into your stack. One key, every model, predictable per-credit pricing.</p>
-                <div class="tool-models">
-                    <span class="pill">REST</span>
-                    <span class="pill">Webhooks</span>
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h18M3 12h18M3 17h12"/></svg>
+                    </div>
+                    <h3>Creator Workspace</h3>
+                    <p>Multi-track editor. Cut, layer, upscale to 4K, auto-caption, schedule — without leaving the Hub.</p>
+                    <div class="tool-tags"><span class="tag">Upscale 4K</span><span class="tag">Captions</span></div>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
+                    </div>
+                    <h3>Developer API</h3>
+                    <p>Plug FanWolf into your stack. One key, every model, predictable per-credit pricing.</p>
+                    <div class="tool-tags"><span class="tag">REST</span><span class="tag">Webhooks</span></div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- COMMUNITY -->
-    <section class="section">
-        <div class="community">
-            <h2>Join The Pack</h2>
-            <p>Real creators sharing real results, prompts, and playbooks. Get early access to new tools before anyone else.</p>
-            <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
-                <a href="#" class="btn btn-primary">Join Discord</a>
-                <a href="#" class="btn btn-ghost">Follow on X</a>
+    <!-- STATS STRIP (replaces fake creator cards) -->
+    <section class="wrap">
+        <div class="stats">
+            <div class="stat"><div class="stat-num">70+</div><div class="stat-label">AI models</div></div>
+            <div class="stat"><div class="stat-num">8</div><div class="stat-label">Tools in one hub</div></div>
+            <div class="stat"><div class="stat-num">∞</div><div class="stat-label">Generations · pay per credit</div></div>
+            <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Commercial rights</div></div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="section" id="how">
+        <div class="wrap">
+            <div class="section-head">
+                <div class="section-eyebrow">How it works</div>
+                <h2>From idea to influencer in 3 steps.</h2>
+                <p>No technical skill required. Most creators publish their first post the same day.</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <h3>Build your AI model</h3>
+                    <p>Upload reference photos or generate from scratch. Lock the face, body, and style.</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <h3>Generate content</h3>
+                    <p>Photos, videos, face-swaps, adult clips — pick a tool, prompt, generate. Switch engines anytime.</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <h3>Post &amp; monetize</h3>
+                    <p>Push to Fanvue, Instagram, X, and more straight from the Hub. Paid in $MONWOLF or fiat.</p>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- PRICING -->
-    <section id="pricing" class="section">
-        <div class="section-header">
-            <h2>Buy Credits. Start Generating.</h2>
-            <p>Pay with debit card or $MONWOLF · Credits never expire</p>
-        </div>
-        <div class="pricing-grid">
-            <div class="price-card">
-                <div class="tier-name">Starter</div>
-                <div class="tier-tag">Test the waters</div>
-                <div class="tier-price">$29<small>/pack</small></div>
-                <div class="tier-credits">300 credits</div>
-                <ul class="tier-features">
-                    <li>Image Studio (Flux, SDXL)</li>
-                    <li>Basic model creator</li>
-                    <li>1 connected platform</li>
-                    <li>Email support</li>
-                </ul>
-                <a href="#monwolf" class="btn btn-ghost">Buy Starter</a>
+    <section class="section" id="pricing">
+        <div class="wrap">
+            <div class="section-head">
+                <div class="section-eyebrow">Pricing</div>
+                <h2>Buy credits. Generate forever.</h2>
+                <p>Pay with debit card or $MONWOLF. Credits never expire and work across every tool.</p>
             </div>
-            <div class="price-card featured">
-                <div class="tier-name">Pro</div>
-                <div class="tier-tag">For serious creators</div>
-                <div class="tier-price">$79<small>/pack</small></div>
-                <div class="tier-credits">1,000 credits</div>
-                <ul class="tier-features">
-                    <li>Everything in Starter</li>
-                    <li>Video Studio (Veo, WAN)</li>
-                    <li>Adult Mode + Fanvue Kit</li>
-                    <li>Up to 5 platforms</li>
-                    <li>Priority support</li>
-                </ul>
-                <a href="#monwolf" class="btn btn-primary">Buy Pro</a>
-            </div>
-            <div class="price-card">
-                <div class="tier-name">Business</div>
-                <div class="tier-tag">Scaling agencies</div>
-                <div class="tier-price">$199<small>/pack</small></div>
-                <div class="tier-credits">3,000 credits</div>
-                <ul class="tier-features">
-                    <li>Everything in Pro</li>
-                    <li>LoRA training included</li>
-                    <li>Unlimited platforms</li>
-                    <li>Multi-model workspace</li>
-                </ul>
-                <a href="#monwolf" class="btn btn-ghost">Buy Business</a>
-            </div>
-            <div class="price-card">
-                <div class="tier-name">Empire</div>
-                <div class="tier-tag">Maximum firepower</div>
-                <div class="tier-price">$499<small>/pack</small></div>
-                <div class="tier-credits">10,000 credits</div>
-                <ul class="tier-features">
-                    <li>Everything in Business</li>
-                    <li>API access included</li>
-                    <li>Custom persona training</li>
-                    <li>Dedicated success manager</li>
-                </ul>
-                <a href="#monwolf" class="btn btn-ghost">Buy Empire</a>
+            <div class="pricing-grid">
+                <div class="price-card">
+                    <div class="tier-name">Starter</div>
+                    <div class="tier-tag">Test the waters</div>
+                    <div class="tier-price">$29<small>/pack</small></div>
+                    <div class="tier-credits">300 credits</div>
+                    <ul class="tier-features">
+                        <li><svg viewBox="0 0 16 16" fill="currentColor"><path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"/></svg> Image Studio (Flux, SDXL)</li>
+                        <li><svg viewBox="0 0 16 16" fill="currentColor"><path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"/></svg> Basic model creator</li>
+                        <li><svg viewBox="0 0 16 16" fill="currentColor"><path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"/></svg> 1 connected platform</li>
+                        <li><svg viewBox="0 0 16 16" fill="currentColor"><path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"/></svg> Email support</li>
+                    </ul>
+                    <a href="#monwolf" class="btn btn-ghost">Buy Starter</a>
+                </div>
+                <div class="price-card featured">
+                    <div class="tier-name">Pro</div>
+                    <div class="tier-tag">For serious creators</div>
+                    <div class="tier-price">$79<small>/pack</small></div>
+                    <div class="tier-credits">1,000 credits</div>
+                    <ul class="tier-features">
+                        <li><svg viewBox="0 0 16 16" fill="currentColor"><path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"/></svg> Everything in Starter</li>
+                        <li><svg viewBox="0 0 16 16" fill="currentColor"><path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"/></svg> Video Studio (Veo, WAN)</li>
+                        <li><svg viewBox="0 0 16 16" fill="currentColor"><path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"/></svg> Adult / Fanvue mode</li>
+                        <li><svg viewBox="0 0 16 16" fill="currentColor"><path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"/></svg> Up to 5 platforms</li>
+                        <li><svg viewBox="0 0 16 16" fill="currentColor"><path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"/></svg> Priority support</li>
+                    </ul>
+                    <a href="#monwolf" class="btn btn-primary">Buy Pro</a>
+                </div>
+                <div class="price-card">
+                    <div class="tier-name">Business</div>
+                    <div class="tier-tag">Scaling agencies</div>
+                    <div class="tier-price">$199<small>/pack</small></div>
+                    <div class="tier-credits">3,000 credits</div>
+                    <ul class="tier-features">
+                        <li><svg viewBox="0 0 16 16" fill="currentColor"><path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"/></svg> Everything in Pro</li>
+                        <li><svg viewBox="0 0 16 16" fill="currentColor"><path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"/></svg> LoRA training</li>
+                        <li><svg viewBox="0 0 16 16" fill="currentColor"><path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"/></svg> Unlimited platforms</li>
+                        <li><svg viewBox="0 0 16 16" fill="currentColor"><path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"/></svg> Multi-model workspace</li>
+                    </ul>
+                    <a href="#monwolf" class="btn btn-ghost">Buy Business</a>
+                </div>
+                <div class="price-card">
+                    <div class="tier-name">Empire</div>
+                    <div class="tier-tag">Maximum firepower</div>
+                    <div class="tier-price">$499<small>/pack</small></div>
+                    <div class="tier-credits">10,000 credits</div>
+                    <ul class="tier-features">
+                        <li><svg viewBox="0 0 16 16" fill="currentColor"><path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"/></svg> Everything in Business</li>
+                        <li><svg viewBox="0 0 16 16" fill="currentColor"><path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"/></svg> Developer API access</li>
+                        <li><svg viewBox="0 0 16 16" fill="currentColor"><path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"/></svg> Custom persona training</li>
+                        <li><svg viewBox="0 0 16 16" fill="currentColor"><path d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"/></svg> Dedicated success manager</li>
+                    </ul>
+                    <a href="#monwolf" class="btn btn-ghost">Buy Empire</a>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- MONWOLF -->
-    <section id="monwolf" class="section">
-        <div class="contract">
-            <h2 style="font-size:2rem; margin-bottom:.5rem;">Pay with $MONWOLF</h2>
-            <p style="color:#bbb;">Buy credits with $MONWOLF on Monad — your wallet appears in the Hub.</p>
-            <div class="contract-box">0x8361a59d340466211ad4aB41C09a32e4530a7777</div>
-            <p style="color:var(--gold); font-size:.9rem;">$MONWOLF on Monad · Contract Address</p>
+    <section class="section" id="monwolf">
+        <div class="wrap">
+            <div class="cta-card">
+                <h2>Pay with $MONWOLF</h2>
+                <p>Buy credits with $MONWOLF on Monad. Your wallet appears in the Hub the moment you sign up.</p>
+                <button type="button" class="contract" id="contract-btn" data-address="0x8361a59d340466211ad4aB41C09a32e4530a7777" aria-label="Copy contract address">
+                    <span>0x8361a59d340466211ad4aB41C09a32e4530a7777</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                </button>
+            </div>
         </div>
     </section>
 
+    <div class="toast" id="toast">Copied to clipboard ✓</div>
+
+    <!-- FOOTER -->
     <footer>
-        <div class="foot-row">
-            <a href="#tools">Tools</a>
-            <a href="#pricing">Pricing</a>
-            <a href="#monwolf">MonWolf</a>
-            <a href="#">API Docs</a>
-            <a href="#">Terms</a>
-            <a href="#">Privacy</a>
+        <div class="wrap foot-grid">
+            <div class="logo">
+                <span class="logo-mark"><img src="logo.png" alt="FanWolf"></span>
+                FanWolf
+            </div>
+            <div class="foot-links">
+                <a href="#tools">Tools</a>
+                <a href="#how">How it works</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#monwolf">$MONWOLF</a>
+                <a href="#">API</a>
+                <a href="#">Terms</a>
+                <a href="#">Privacy</a>
+            </div>
+            <div>© <span id="year"></span> FanWolf AI</div>
         </div>
-        © <span id="year"></span> FanWolf AI · Fans. Content. Wealth. Powered by AI.
     </footer>
 
     <script>
@@ -436,6 +524,28 @@
             });
         });
         document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Copy contract to clipboard
+        const contractBtn = document.getElementById('contract-btn');
+        const toast = document.getElementById('toast');
+        let toastTimer;
+        contractBtn?.addEventListener('click', async () => {
+            const addr = contractBtn.dataset.address;
+            try {
+                await navigator.clipboard.writeText(addr);
+            } catch {
+                const r = document.createRange();
+                r.selectNodeContents(contractBtn.querySelector('span'));
+                const sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(r);
+                document.execCommand('copy');
+                sel.removeAllRanges();
+            }
+            toast.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => toast.classList.remove('show'), 1800);
+        });
     </script>
 </body>
 </html>
