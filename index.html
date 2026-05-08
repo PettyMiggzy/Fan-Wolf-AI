@@ -138,6 +138,66 @@
         .engine { color:var(--text-2); font-size:1rem; font-weight:600; opacity:.7; transition:opacity .2s, color .2s; }
         .engine:hover { opacity:1; color:var(--text); }
 
+        /* CREATOR TICKER */
+        .creators { padding:5rem 0 4rem; overflow:hidden; position:relative; }
+        .creators-head { text-align:center; max-width:680px; margin:0 auto 2.4rem; padding:0 1.5rem; }
+        .creators-head h2 { font-size:clamp(1.7rem,3vw,2.2rem); font-weight:800; letter-spacing:-.02em; margin-bottom:.5rem; }
+        .creators-head p { color:var(--text-2); font-size:1rem; }
+
+        .ticker { position:relative; width:100%; overflow:hidden; mask-image:linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%); -webkit-mask-image:linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%); }
+        .ticker-track {
+            display:flex; gap:1rem;
+            width:max-content;
+            animation:ticker 50s linear infinite;
+        }
+        .ticker:hover .ticker-track { animation-play-state:paused; }
+        @keyframes ticker {
+            from { transform:translateX(0); }
+            to { transform:translateX(-50%); }
+        }
+
+        .creator-card {
+            flex:0 0 220px;
+            aspect-ratio:9/16;
+            border-radius:14px;
+            position:relative; overflow:hidden;
+            border:1px solid var(--border);
+            background:linear-gradient(135deg, #2a1f4d 0%, #6b3d8a 50%, #f5c242 100%);
+            transition:transform .25s, border-color .25s;
+        }
+        .creator-card.g2 { background:linear-gradient(155deg, #1a2342 0%, #4a3677 50%, #f5c242 100%); }
+        .creator-card.g3 { background:linear-gradient(125deg, #2d1a3d 0%, #8b5cf6 60%, #f5c242 100%); }
+        .creator-card.g4 { background:linear-gradient(165deg, #3a1f2d 0%, #7a4a8f 50%, #f5c242 100%); }
+        .creator-card.g5 { background:linear-gradient(135deg, #1f2a4d 0%, #5d4a8a 50%, #f5c242 100%); }
+        .creator-card.g6 { background:linear-gradient(145deg, #2a1f3d 0%, #6b4a9a 50%, #f5c242 100%); }
+        .creator-card:hover { transform:translateY(-4px); border-color:var(--accent); }
+        .creator-card img,
+        .creator-card video {
+            position:absolute; inset:0;
+            width:100%; height:100%;
+            object-fit:cover; display:block;
+        }
+        .creator-card img[src=""], .creator-card img:not([src]) { display:none; }
+        .badge-stat {
+            position:absolute; right:.7rem; bottom:.7rem;
+            display:inline-flex; align-items:center; gap:.3rem;
+            padding:.3rem .6rem;
+            background:rgba(0,0,0,.65);
+            backdrop-filter:blur(8px);
+            border-radius:9999px;
+            font-size:.78rem; font-weight:700;
+            color:#fff;
+        }
+        .badge-stat .ico { width:11px; height:11px; }
+        .badge-stat.heart .ico { color:#ec4899; }
+        .badge-stat.money .ico { color:#22c55e; }
+        .badge-stat.thumb .ico { color:#f5c242; }
+
+        @media (prefers-reduced-motion: reduce) {
+            .ticker-track { animation:none; }
+            .ticker { mask:none; -webkit-mask:none; overflow-x:auto; }
+        }
+
         /* SECTION */
         .section { padding:6.5rem 0; }
         .section-head { text-align:center; max-width:680px; margin:0 auto 3.5rem; }
@@ -292,6 +352,17 @@
                 <span class="engine">Nano Banana 2</span>
                 <span class="engine">Custom LoRA</span>
             </div>
+        </div>
+    </section>
+
+    <!-- CREATOR TICKER -->
+    <section class="creators">
+        <div class="creators-head">
+            <h2>Join 120,000+ creators winning with FanWolf</h2>
+            <p>AI models built and scaled inside the Hub.</p>
+        </div>
+        <div class="ticker" aria-hidden="true">
+            <div class="ticker-track" id="tickerTrack"></div>
         </div>
     </section>
 
@@ -524,6 +595,31 @@
             });
         });
         document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Build ticker cards (mix of images + videos)
+        const cards = [
+            { type:'image', src:'images/girl-1.jpg', g:'g1', stat:{kind:'heart', label:'1.2M'} },
+            { type:'video', src:'images/girl-1.mp4', g:'g2', stat:{kind:'money', label:'$5.8K'} },
+            { type:'video', src:'images/girl-2.mp4', g:'g3', stat:{kind:'thumb', label:'340K'} },
+            { type:'video', src:'images/girl-3.mp4', g:'g4', stat:{kind:'money', label:'$12.4K'} },
+        ];
+        const icons = {
+            heart:'<svg class="ico" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.5-7-10a4 4 0 017-2.7A4 4 0 0119 11c0 5.5-7 10-7 10z"/></svg>',
+            money:'<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="2" x2="12" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>',
+            thumb:'<svg class="ico" viewBox="0 0 24 24" fill="currentColor"><path d="M2 10h4v12H2zM21 10h-7l1-5a2 2 0 00-2-2l-4 8v9h11a2 2 0 002-2l1-7a2 2 0 00-2-3z"/></svg>',
+        };
+        function renderCard(c) {
+            const media = c.type === 'video'
+                ? `<video autoplay muted loop playsinline preload="metadata"><source src="${c.src}" type="video/mp4"></video>`
+                : `<img src="${c.src}" alt="" loading="lazy">`;
+            return `<div class="creator-card ${c.g}">${media}<span class="badge-stat ${c.stat.kind}">${icons[c.stat.kind]} ${c.stat.label}</span></div>`;
+        }
+        const track = document.getElementById('tickerTrack');
+        if (track) {
+            const html = cards.map(renderCard).join('');
+            // duplicate for seamless infinite scroll
+            track.innerHTML = html + html;
+        }
 
         // Copy contract to clipboard
         const contractBtn = document.getElementById('contract-btn');
